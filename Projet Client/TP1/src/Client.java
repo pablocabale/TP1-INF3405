@@ -3,6 +3,7 @@ import java.net.Socket;
 // Application client
 public class Client {
     private static Socket socket;
+
     public static void main(String[] args) throws Exception {
         // Adresse et port du serveur
         String serverAddress = "127.0.0.1";

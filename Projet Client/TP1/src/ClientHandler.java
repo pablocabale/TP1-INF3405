@@ -43,4 +43,15 @@ public class ClientHandler extends Thread { // pour traiter la demande de chaque
 
         out.writeUTF("Good shit:" + clientUsername);
     }
+
+    private void verifyUser(DataOutputStream out, DataInputStream in) throws IOException {
+        String clientUsername = in.readUTF();
+        String clientPassword = in.readUTF();
+
+        System.out.println(clientUsername);
+        System.out.println(clientPassword);
+
+        out.writeUTF("Good shit:" + clientUsername);
+        //Ici ajouter verification de user et mdp
+    }
 }

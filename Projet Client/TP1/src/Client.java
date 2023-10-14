@@ -19,15 +19,33 @@ public class Client {
         }
     }
 
-    private static void connectionToServer() throws IOException {
+    private static void connectionToServer() {
         // Adresse et port du serveur
-        String serverAddress = "127.0.0.1";
-        int port = 5000;
+        //String serverAddress = "127.0.0.1";
+        //int port = 5000;
 
-        // Création d'une nouvelle connexion aves le serveur
-        socket = new Socket(serverAddress, port);
+        String serverAddress;
+        int port;
+        Scanner inputScanner = new Scanner(System.in);
 
-        System.out.format("Serveur lancé sur [%s:%d]", serverAddress, port);
+        System.out.println("Server IP adress?");
+        serverAddress = inputScanner.next();
+        //Ici ajouter verification du format de IP
+
+        System.out.println("Server Port?");
+        port = inputScanner.nextInt();
+        //Ici ajouter verification du format de Port
+
+        try {
+            // Création d'une nouvelle connexion aves le serveur
+            socket = new Socket(serverAddress, port);
+        } catch (IOException e) {
+            System.out.println("Connection failed, try again.");
+            connectionToServer();
+            return;
+        }
+
+        System.out.format("Server running on: [%s:%d]", serverAddress, port);
     }
 
     private static void serverCommunication() throws IOException {
@@ -35,17 +53,23 @@ public class Client {
         DataInputStream in = new DataInputStream(socket.getInputStream());
 
         // Attente de la réception d'un message envoyé par le, server sur le canal
-        String helloMessageFromServer = in.readUTF();
-        System.out.println(helloMessageFromServer);
+        String messageFromServer = in.readUTF();
+        System.out.println(messageFromServer);
 
         DataOutputStream out = new DataOutputStream(socket.getOutputStream()); // création de canal d’envoi
         Scanner inputScanner = new Scanner(System.in);
 
-        int portInput = 0;
-        while (portInput <= 5000) {
-            System.out.println("Enter IP adress");
-            portInput = inputScanner.nextInt();
-            out.writeUTF("testest"); // envoi de message
-        }
+        String username;
+        System.out.println("Username?");
+        username = inputScanner.next();
+        out.writeUTF(username);
+
+        String password;
+        System.out.println("Password?");
+        password = inputScanner.next();
+        out.writeUTF(password);
+
+        messageFromServer = in.readUTF();
+        System.out.println(messageFromServer);
     }
 }

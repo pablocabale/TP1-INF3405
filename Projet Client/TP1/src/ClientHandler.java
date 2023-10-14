@@ -34,9 +34,13 @@ public class ClientHandler extends Thread { // pour traiter la demande de chaque
         out.writeUTF("\nHello from server - you are client#" + clientNumber); // envoi de message
 
         DataInputStream in = new DataInputStream(socket.getInputStream()); // recevoir messages
-        while (true){
-            String messageReceived = in.readUTF();
-            System.out.println(messageReceived);
-        }
+
+        String clientUsername = in.readUTF();
+        String clientPassword = in.readUTF();
+
+        System.out.println(clientUsername);
+        System.out.println(clientPassword);
+
+        out.writeUTF("Good shit:" + clientUsername);
     }
 }

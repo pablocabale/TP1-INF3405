@@ -1,5 +1,8 @@
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.net.Socket;
+import java.util.Scanner;
+
 // Application client
 public class Client {
     private static Socket socket;
@@ -8,6 +11,9 @@ public class Client {
         // Adresse et port du serveur
         String serverAddress = "127.0.0.1";
         int port = 5000;
+
+        int portInput = 0;
+        Scanner myObj = new Scanner(System.in);
 
         // Création d'une nouvelle connexion aves le serveur
         socket = new Socket(serverAddress, port);
@@ -19,6 +25,13 @@ public class Client {
         // Attente de la réception d'un message envoyé par le, server sur le canal
         String helloMessageFromServer = in.readUTF();
         System.out.println(helloMessageFromServer);
+
+        while (portInput <= 5000) {
+            System.out.println("Enter IP adress");
+            portInput = myObj.nextInt();
+            DataOutputStream out = new DataOutputStream(socket.getOutputStream()); // création de canal d’envoi
+            out.writeUTF("testest"); // envoi de message
+        }
 
         // fermeture de La connexion avec le serveur
         socket.close();

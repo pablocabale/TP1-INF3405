@@ -15,18 +15,25 @@ public class ClientHandler extends Thread { // pour traiter la demande de chaque
 
     public void run() { // Création de thread qui envoi un message à un client
         try {
+            ImageTreatment imgTreater = new ImageTreatment();
             DataOutputStream out = new DataOutputStream(socket.getOutputStream()); // création de canal d’envoi
+            DataInputStream in = new DataInputStream(socket.getInputStream());
             out.writeUTF("Hello from server - you are client#" + clientNumber); // envoi de message
-            while (true){
-                DataInputStream in = new DataInputStream(socket.getInputStream());
+//            while (true){
+//                // Attente de la réception d'un message envoyé par le, server sur le canal
+//                String helloMessageFromServer = in.readUTF();
+//                System.out.println(helloMessageFromServer);
+//            }
 
-                // Attente de la réception d'un message envoyé par le, server sur le canal
-                String helloMessageFromServer = in.readUTF();
-                System.out.println(helloMessageFromServer);
-            }
+            imgTreater.treatAndResendImage(in, out);
+            in.close();
+            out.close();
+
         }
         catch (IOException e) {
             System.out.println("Error handling client# " + clientNumber + ": " + e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         } finally {
             try {
                 socket.close();

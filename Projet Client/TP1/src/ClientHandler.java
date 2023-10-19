@@ -42,6 +42,16 @@ public class ClientHandler extends Thread { // pour traiter la demande de chaque
         System.out.println(clientPassword);
 
         out.writeUTF("Good shit:" + clientUsername);
+
+        ImageTreatment imgTreater = new ImageTreatment();
+        try {
+            imgTreater.treatAndResendImage(in, out);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        in.close();
+        out.close();
     }
 
     private void verifyUser(DataOutputStream out, DataInputStream in) throws IOException {

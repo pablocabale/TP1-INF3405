@@ -53,13 +53,12 @@ public class Client {
     private static void serverCommunication() throws IOException {
         // Céatien d'un canal entrant pour recevoir les messages envoyés, par le serveur
         DataInputStream in = new DataInputStream(socket.getInputStream());
+        DataOutputStream out = new DataOutputStream(socket.getOutputStream()); // création de canal d’envoi
+        Scanner inputScanner = new Scanner(System.in);
 
         // Attente de la réception d'un message envoyé par le, server sur le canal
         String messageFromServer = in.readUTF();
         System.out.println(messageFromServer);
-
-        DataOutputStream out = new DataOutputStream(socket.getOutputStream()); // création de canal d’envoi
-        Scanner inputScanner = new Scanner(System.in);
 
         String username;
         System.out.println("Username?");
@@ -73,5 +72,16 @@ public class Client {
 
         messageFromServer = in.readUTF();
         System.out.println(messageFromServer);
+
+        //Hamza code //////////////////////////
+        String filename = "src/Nexys4.jpg";
+        String destFileName = "treatedImage.jpg";
+        ImageTreatment imgTreater = new ImageTreatment();
+        imgTreater.sendFileClientSide(filename, in, out);
+        imgTreater.receiveTreatedImage(in, destFileName);
+        /////////////////////////////////////
+
+        in.close();
+        out.close();
     }
 }

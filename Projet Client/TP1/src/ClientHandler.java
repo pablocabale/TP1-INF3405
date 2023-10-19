@@ -35,13 +35,7 @@ public class ClientHandler extends Thread { // pour traiter la demande de chaque
 
         DataInputStream in = new DataInputStream(socket.getInputStream()); // recevoir messages
 
-        String clientUsername = in.readUTF();
-        String clientPassword = in.readUTF();
-
-        System.out.println(clientUsername);
-        System.out.println(clientPassword);
-
-        out.writeUTF("Good shit:" + clientUsername);
+        verifyUser(out, in);
 
         ImageTreatment imgTreater = new ImageTreatment();
         try {
@@ -49,6 +43,8 @@ public class ClientHandler extends Thread { // pour traiter la demande de chaque
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+        out.writeUTF("Image treated");
 
         in.close();
         out.close();
@@ -61,7 +57,7 @@ public class ClientHandler extends Thread { // pour traiter la demande de chaque
         System.out.println(clientUsername);
         System.out.println(clientPassword);
 
-        out.writeUTF("Good shit:" + clientUsername);
+        out.writeUTF(clientUsername + "You are connected");
         //Ici ajouter verification de user et mdp
     }
 }

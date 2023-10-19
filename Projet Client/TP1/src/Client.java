@@ -60,28 +60,32 @@ public class Client {
         String messageFromServer = in.readUTF();
         System.out.println(messageFromServer);
 
-        String username;
-        System.out.println("Username?");
-        username = inputScanner.next();
-        out.writeUTF(username);
+        verifyUser(out, in, inputScanner);
 
-        String password;
-        System.out.println("Password?");
-        password = inputScanner.next();
-        out.writeUTF(password);
-
-        messageFromServer = in.readUTF();
-        System.out.println(messageFromServer);
-
-        //Hamza code //////////////////////////
         String filename = "src/Nexys4.jpg";
         String destFileName = "treatedImage.jpg";
         ImageTreatment imgTreater = new ImageTreatment();
         imgTreater.sendFileClientSide(filename, in, out);
         imgTreater.receiveTreatedImage(in, destFileName);
-        /////////////////////////////////////
+
+        messageFromServer = in.readUTF();
+        System.out.println(messageFromServer);
 
         in.close();
         out.close();
+    }
+
+    private static void verifyUser(DataOutputStream out, DataInputStream in, Scanner inputScanner) throws IOException {
+        System.out.println("Username?");
+        String username = inputScanner.next();
+        out.writeUTF(username);
+
+        System.out.println("Password?");
+        String password = inputScanner.next();
+        out.writeUTF(password);
+        //Ici verifier user
+
+        String messageFromServer = in.readUTF();
+        System.out.println(messageFromServer);
     }
 }

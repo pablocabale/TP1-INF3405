@@ -1,5 +1,5 @@
 public class Validation {
-    public boolean validateIPAddress(String address) {
+    public static boolean isValidIP(String address) {
         String[] elems = address.split("\\.");
         if (elems.length != 4) return false;
         for ( String elem : elems) {
@@ -9,7 +9,7 @@ public class Validation {
         return true;
     }
 
-    public boolean validatePort(Integer port){
+    public static boolean isValidPort(Integer port){
         return port >= 5000 && port <= 5050;
     }
 }

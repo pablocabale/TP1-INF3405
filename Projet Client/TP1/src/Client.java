@@ -28,13 +28,15 @@ public class Client {
         int port;
         Scanner inputScanner = new Scanner(System.in);
 
-        System.out.println("Server IP adress?");
-        serverAddress = inputScanner.next();
-        //Ici ajouter verification du format de IP
+        do {
+            System.out.println("Enter valid server IP adress (xxx.xxx.xxx.xxx)");
+            serverAddress = inputScanner.next();
+        } while (!Validation.isValidIP(serverAddress));
 
-        System.out.println("Server Port?");
-        port = inputScanner.nextInt();
-        //Ici ajouter verification du format de Port
+        do {
+            System.out.println("Enter valid server port (Between 5000 and 5050)");
+            port = inputScanner.nextInt();
+        } while (!Validation.isValidPort(port));
 
         try {
             // Création d'une nouvelle connexion aves le serveur

@@ -36,13 +36,15 @@ public class Serveur {
         int serverPort;
         Scanner inputScanner = new Scanner(System.in);
 
-        System.out.println("Server IP adress?");
-        serverAddress = inputScanner.next();
-        //Ici ajouter verification du format de IP
+        do {
+            System.out.println("Enter valid server IP adress (xxx.xxx.xxx.xxx)");
+            serverAddress = inputScanner.next();
+        } while (!Validation.isValidIP(serverAddress));
 
-        System.out.println("Server Port?");
-        serverPort = inputScanner.nextInt();
-        //Ici ajouter verification du format de Port
+        do {
+            System.out.println("Enter valid server port (Between 5000 and 5050)");
+            serverPort = inputScanner.nextInt();
+        } while (!Validation.isValidPort(serverPort));
 
         // Création de la connexien pour communiquer ave les, clients
         try {

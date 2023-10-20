@@ -33,10 +33,12 @@ public class Client {
             serverAddress = inputScanner.next();
         } while (!Validation.isValidIP(serverAddress));
 
+        String portString;
         do {
             System.out.println("Enter valid server port (Between 5000 and 5050)");
-            port = inputScanner.nextInt();
-        } while (!Validation.isValidPort(port));
+            portString = inputScanner.next();
+        } while (!Validation.isValidPort(portString));
+        port = Integer.parseInt(portString);
 
         try {
             // Création d'une nouvelle connexion aves le serveur

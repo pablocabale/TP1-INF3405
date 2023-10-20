@@ -41,10 +41,12 @@ public class Serveur {
             serverAddress = inputScanner.next();
         } while (!Validation.isValidIP(serverAddress));
 
+        String portString;
         do {
             System.out.println("Enter valid server port (Between 5000 and 5050)");
-            serverPort = inputScanner.nextInt();
-        } while (!Validation.isValidPort(serverPort));
+            portString = inputScanner.next();
+        } while (!Validation.isValidPort(portString));
+        serverPort = Integer.parseInt(portString);
 
         // Création de la connexien pour communiquer ave les, clients
         try {

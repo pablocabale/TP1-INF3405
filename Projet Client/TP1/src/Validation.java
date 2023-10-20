@@ -12,14 +12,25 @@ public class Validation {
         String[] elems = address.split("\\.");
         if (elems.length != 4) return false;
         for ( String elem : elems) {
-            int octet = Integer.parseInt(elem);
-            if (octet < 0 || octet > 255) return false;
+            try {
+                int octet = Integer.parseInt(elem);
+                if (octet < 0 || octet > 255) return false;
+            }
+            catch (Exception e) {
+                return false;
+            }
         }
         return true;
     }
 
-    public static boolean isValidPort(Integer port){
-        return port >= 5000 && port <= 5050;
+    public static boolean isValidPort(String portString){
+        try {
+            int port = Integer.parseInt(portString);
+            return port >= 5000 && port <= 5050;
+        }
+        catch (Exception e) {
+            return false;
+        }
     }
 
     public static boolean isValidUser(User user) {

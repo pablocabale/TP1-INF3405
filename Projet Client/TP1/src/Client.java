@@ -82,18 +82,23 @@ public class Client {
     }
 
     private static void imageService(DataOutputStream out, DataInputStream in, Scanner inputScanner) throws IOException {
-        System.out.println("Image file name?");
-        // Nexys4.jpg
-        String filename = inputScanner.next();
+        try {
+            System.out.println("Image file name?");
+            // Nexys4.jpg
+            String filename = inputScanner.next();
 
-        System.out.println("Treated image file name?");
-        // treatedImage.jpg
-        String destFileName = inputScanner.next();
+            System.out.println("Treated image file name?");
+            // treatedImage.jpg
+            String destFileName = inputScanner.next();
 
-        out.writeUTF(filename);
-        ImageTreatment imgTreater = new ImageTreatment();
-        imgTreater.sendFileClientSide(filename, in, out);
-        imgTreater.receiveTreatedImage(in, destFileName);
-        System.out.println("Location of new file: ./" + destFileName);
+            ImageTreatment imgTreater = new ImageTreatment();
+            imgTreater.sendFileClientSide(filename, in, out);
+            imgTreater.receiveTreatedImage(in, destFileName);
+            System.out.println("Location of new file: ./" + destFileName);
+
+        } catch (RuntimeException e) {
+            System.out.println("Image file name invalid, try again");
+            imageService(out, in, inputScanner);
+        }
     }
 }

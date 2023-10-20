@@ -31,6 +31,7 @@ public class ImageTreatment {
             File file = new File(filename);
             FileInputStream fileInputStream = new FileInputStream(file);
 
+            out.writeUTF(filename);
             // Ecrire la taille du fichier
             out.writeLong(file.length());
             byte[] buffer = new byte[4 * 1024];
@@ -46,7 +47,7 @@ public class ImageTreatment {
 
 
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException();
         }
     }
 

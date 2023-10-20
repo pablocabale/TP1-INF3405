@@ -46,15 +46,26 @@ public class ClientHandler extends Thread { // pour traiter la demande de chaque
     }
 
     private String verifyUser(DataOutputStream out, DataInputStream in) throws IOException {
-        String clientUsername = in.readUTF();
-        String clientPassword = in.readUTF();
+        boolean isVerified = false;
+        String clientUsername;
+        String clientPassword;
 
-        System.out.println(clientUsername);
-        System.out.println(clientPassword);
+        do {
+            clientUsername = in.readUTF();
+            clientPassword = in.readUTF();
+
+            User user = new User(clientUsername, clientPassword);
+            isVerified = Validation.isValidUser(user);
+            if(!isVerified) {
+                out.writeUTF("User doesn't exist. User: " + clientUsername + " registered.");
+                out.writeUTF("not valid");
+            }
+
+        } while (!isVerified);
 
         out.writeUTF(clientUsername + ": you are connected");
+        out.writeUTF("valid");
         return clientUsername;
-        //Ici ajouter verification de user et mdp
     }
 
     private  void imageService(DataOutputStream out, DataInputStream in, String user) throws IOException {

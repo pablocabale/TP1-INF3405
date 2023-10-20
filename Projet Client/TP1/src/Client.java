@@ -68,17 +68,24 @@ public class Client {
     }
 
     private static void verifyUser(DataOutputStream out, DataInputStream in, Scanner inputScanner) throws IOException {
-        System.out.println("Username?");
-        String username = inputScanner.next();
-        out.writeUTF(username);
+        boolean isValidUser = false;
+        do {
+            System.out.println("Username?");
+            String username = inputScanner.next();
+            out.writeUTF(username);
 
-        System.out.println("Password?");
-        String password = inputScanner.next();
-        out.writeUTF(password);
-        //Ici verifier user
+            System.out.println("Password?");
+            String password = inputScanner.next();
+            out.writeUTF(password);
 
-        String messageFromServer = in.readUTF();
-        System.out.println(messageFromServer);
+            String messageFromServer = in.readUTF();
+            System.out.println(messageFromServer);
+
+            messageFromServer = in.readUTF();
+            if (messageFromServer.equals("valid"))
+                isValidUser = true;
+
+        } while (!isValidUser);
     }
 
     private static void imageService(DataOutputStream out, DataInputStream in, Scanner inputScanner) throws IOException {

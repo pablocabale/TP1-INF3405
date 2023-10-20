@@ -61,15 +61,7 @@ public class Client {
         System.out.println(messageFromServer);
 
         verifyUser(out, in, inputScanner);
-
-        String filename = "src/Nexys4.jpg";
-        String destFileName = "treatedImage.jpg";
-        ImageTreatment imgTreater = new ImageTreatment();
-        imgTreater.sendFileClientSide(filename, in, out);
-        imgTreater.receiveTreatedImage(in, destFileName);
-
-        messageFromServer = in.readUTF();
-        System.out.println(messageFromServer);
+        imageService(out, in, inputScanner);
 
         in.close();
         out.close();
@@ -87,5 +79,21 @@ public class Client {
 
         String messageFromServer = in.readUTF();
         System.out.println(messageFromServer);
+    }
+
+    private static void imageService(DataOutputStream out, DataInputStream in, Scanner inputScanner) throws IOException {
+        System.out.println("Image file name?");
+        // Nexys4.jpg
+        String filename = inputScanner.next();
+
+        System.out.println("Treated image file name?");
+        // treatedImage.jpg
+        String destFileName = inputScanner.next();
+
+        out.writeUTF(filename);
+        ImageTreatment imgTreater = new ImageTreatment();
+        imgTreater.sendFileClientSide(filename, in, out);
+        imgTreater.receiveTreatedImage(in, destFileName);
+        System.out.println("Location of new file: ./" + destFileName);
     }
 }

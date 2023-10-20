@@ -2,6 +2,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public class ClientHandler extends Thread { // pour traiter la demande de chaque client sur un socket particulier
     private Socket socket;
     private int clientNumber;
@@ -35,7 +38,29 @@ public class ClientHandler extends Thread { // pour traiter la demande de chaque
 
         DataInputStream in = new DataInputStream(socket.getInputStream()); // recevoir messages
 
-        verifyUser(out, in);
+        String clientUsername = verifyUser(out, in);
+        imageService(out, in, clientUsername);
+
+        in.close();
+        out.close();
+    }
+
+    private String verifyUser(DataOutputStream out, DataInputStream in) throws IOException {
+        String clientUsername = in.readUTF();
+        String clientPassword = in.readUTF();
+
+        System.out.println(clientUsername);
+        System.out.println(clientPassword);
+
+        out.writeUTF(clientUsername + ": you are connected");
+        return clientUsername;
+        //Ici ajouter verification de user et mdp
+    }
+
+    private  void imageService(DataOutputStream out, DataInputStream in, String user) throws IOException {
+        String imageFile = in.readUTF();
+        System.out.println("[" + user + " - " + socket.getRemoteSocketAddress().toString() + " - " + LocalDate.now() +
+                "@" + LocalTime.now() + "] : Image " + imageFile + " received for treatment.");
 
         ImageTreatment imgTreater = new ImageTreatment();
         try {
@@ -43,21 +68,5 @@ public class ClientHandler extends Thread { // pour traiter la demande de chaque
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-        out.writeUTF("Image treated");
-
-        in.close();
-        out.close();
-    }
-
-    private void verifyUser(DataOutputStream out, DataInputStream in) throws IOException {
-        String clientUsername = in.readUTF();
-        String clientPassword = in.readUTF();
-
-        System.out.println(clientUsername);
-        System.out.println(clientPassword);
-
-        out.writeUTF(clientUsername + "You are connected");
-        //Ici ajouter verification de user et mdp
     }
 }

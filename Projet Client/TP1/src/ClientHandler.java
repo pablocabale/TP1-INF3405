@@ -70,14 +70,11 @@ public class ClientHandler extends Thread { // pour traiter la demande de chaque
 
     private  void imageService(DataOutputStream out, DataInputStream in, String user) throws IOException {
         ImageTreatment imgTreater = new ImageTreatment();
-        try {
-            String imageFile = in.readUTF();
-            System.out.println("[" + user + " - " + socket.getRemoteSocketAddress().toString() + " - " +
-                    LocalDate.now() + "@" + LocalTime.now() + "] : Image " + imageFile + " received for treatment.");
 
-            imgTreater.treatAndResendImage(in, out);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        String imageFile = in.readUTF();
+        System.out.println("[" + user + " - " + socket.getRemoteSocketAddress().toString() + " - " +
+                LocalDate.now() + "@" + LocalTime.now() + "] : Image " + imageFile + " received for treatment.");
+
+        imgTreater.treatAndResendImage(in, out);
     }
 }

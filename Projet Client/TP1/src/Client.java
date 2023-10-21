@@ -1,5 +1,6 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
@@ -12,7 +13,11 @@ public class Client {
         try {
             connectionToServer();
             serverCommunication();
-        } finally {
+        }
+        catch (IOException e) {
+            System.out.println("Connection with server lost. Try again later.");
+        }
+        finally {
             // fermeture de La connexion avec le serveur
             System.out.println("Connection with server lost");
             socket.close();
@@ -105,7 +110,7 @@ public class Client {
             imgTreater.receiveTreatedImage(in, destFileName);
             System.out.println("Location of new file: ./" + destFileName);
 
-        } catch (RuntimeException e) {
+        } catch (FileNotFoundException e) {
             System.out.println("Image file name invalid, try again");
             imageService(out, in, inputScanner);
         }

@@ -21,16 +21,14 @@ public class ImageTreatment {
         }
     }
 
-    public void sendFileClientSide(String filename, DataInputStream in, DataOutputStream out) {
+    public void sendFileClientSide(String filename, DataInputStream in, DataOutputStream out) throws IOException {
         try {
-
-            System.out.println("Sending the File to the Server");
-
             // Partie de code inspirée de https://www.geeksforgeeks.org/transfer-the-file-client-socket-to-server-socket-in-java/
             int bytes = 0;
             File file = new File(filename);
             FileInputStream fileInputStream = new FileInputStream(file);
 
+            System.out.println("Sending the File to the Server");
             out.writeUTF(filename);
             // Ecrire la taille du fichier
             out.writeLong(file.length());
@@ -46,37 +44,34 @@ public class ImageTreatment {
 //            receiveTreatedImage(in);
 
 
-        } catch (Exception e) {
-            throw new RuntimeException();
+        } catch (FileNotFoundException e) {
+            throw new FileNotFoundException();
+        } catch (IOException e) {
+            throw new IOException();
         }
     }
 
-    public void treatAndResendImage(DataInputStream in, DataOutputStream out) throws Exception {
-        try {
-            int bytes = 0;
-            ByteArrayOutputStream byteOut = new ByteArrayOutputStream(); // Output stream ou on ecrit notre byte[]
+    public void treatAndResendImage(DataInputStream in, DataOutputStream out) throws IOException {
+        int bytes = 0;
+        ByteArrayOutputStream byteOut = new ByteArrayOutputStream(); // Output stream ou on ecrit notre byte[]
 
-            // Boucle inspirée de https://www.geeksforgeeks.org/transfer-the-file-client-socket-to-server-socket-in-java/
-            long size = in.readLong();
-            byte[] buffer = new byte[4 * 1024];
-            while (size > 0 && (bytes = in.read(buffer, 0, (int)Math.min(buffer.length, size))) != -1) {
-                byteOut.write(buffer, 0, bytes);
-                size -= bytes;
-            }
-
-            // Recupere le byte[] du output stream et appliquer Sobel dessus
-            byte[] image = byteOut.toByteArray();
-            byte[] processedImage = sobelFilter(image);
-
-            // Ecris la taille de l'image modifiée ainsi que l'image en byte[]
-            out.writeInt(processedImage.length);
-            out.write(processedImage);
-
-            byteOut.close();
+        // Boucle inspirée de https://www.geeksforgeeks.org/transfer-the-file-client-socket-to-server-socket-in-java/
+        long size = in.readLong();
+        byte[] buffer = new byte[4 * 1024];
+        while (size > 0 && (bytes = in.read(buffer, 0, (int)Math.min(buffer.length, size))) != -1) {
+            byteOut.write(buffer, 0, bytes);
+            size -= bytes;
         }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        // Recupere le byte[] du output stream et appliquer Sobel dessus
+        byte[] image = byteOut.toByteArray();
+        byte[] processedImage = sobelFilter(image);
+
+        // Ecris la taille de l'image modifiée ainsi que l'image en byte[]
+        out.writeInt(processedImage.length);
+        out.write(processedImage);
+
+        byteOut.close();
     }
 
     // Fonction qui prends une image en byte[] et qui renvoie l'image traitée(Sobel) en byte[]

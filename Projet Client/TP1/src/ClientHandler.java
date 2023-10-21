@@ -9,10 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClientHandler extends Thread { // pour traiter la demande de chaque client sur un socket particulier
-    private Socket socket;
-    private int clientNumber;
-
-
+    private final Socket socket;
+    private final int clientNumber;
     public ClientHandler(Socket socket, int clientNumber) {
         this.socket = socket;
         this.clientNumber = clientNumber;
@@ -63,7 +61,6 @@ public class ClientHandler extends Thread { // pour traiter la demande de chaque
                 out.writeUTF("User doesn't exist. User: " + clientUsername + " registered.");
                 out.writeUTF("not valid");
             }
-
         } while (!isVerified);
 
         out.writeUTF(clientUsername + ": you are connected");
@@ -88,7 +85,6 @@ public class ClientHandler extends Thread { // pour traiter la demande de chaque
         try {
             BufferedReader reader = new BufferedReader(new FileReader("users.json"));
             users = gson.fromJson(reader, new TypeToken<List<User>>() {}.getType());
-            // 'users' now contains the list of users loaded from the JSON file.
         }
         catch (FileNotFoundException e) {
             System.out.println("Users database not created yet");
@@ -110,7 +106,8 @@ public class ClientHandler extends Thread { // pour traiter la demande de chaque
             FileWriter fileWriter = new FileWriter("users.json");
             fileWriter.write(updatedJson);
             fileWriter.close();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             System.out.println("Error writing");
         }
     }
